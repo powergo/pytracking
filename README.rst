@@ -20,6 +20,7 @@ Requirements
 django-celery-fulldbresult works with Python 2.7 and 3.4+. It requires requests
 and optionally cryptography and lxml.
 
+
 Installation
 ------------
 
@@ -34,6 +35,7 @@ Usage
 -----
 
 TODO
+
 
 License
 -------
