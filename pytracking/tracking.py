@@ -96,12 +96,16 @@ class Configuration(object):
         if self.include_webhook_url and self.webhook_url:
             data["webhook"] = self.webhook_url
 
+        print(data)
+
         return data
 
     def get_url_encoded_data_str(self, data_to_embed):
         """TODO
         """
         json_byte_str = json.dumps(data_to_embed).encode(self.encoding)
+
+        print(json_byte_str)
 
         if self.encryption_key:
             data_str = self.encryption_key.encrypt(
