@@ -1,0 +1,8 @@
+*.pyc
+/static
+/static-built
+/build
+*.egg-info
+.idea/
+.tox/
+dist/
