@@ -96,16 +96,12 @@ class Configuration(object):
         if self.include_webhook_url and self.webhook_url:
             data["webhook"] = self.webhook_url
 
-        print(data)
-
         return data
 
     def get_url_encoded_data_str(self, data_to_embed):
         """TODO
         """
         json_byte_str = json.dumps(data_to_embed).encode(self.encoding)
-
-        print(json_byte_str)
 
         if self.encryption_key:
             data_str = self.encryption_key.encrypt(
@@ -131,6 +127,9 @@ class Configuration(object):
     def get_click_tracking_result(self, encoded_url_path, request_data):
         """TODO
         """
+        if encoded_url_path.startswith("/"):
+            encoded_url_path = encoded_url_path[1:]
+
         if self.encryption_key:
             payload = self.encryption_key.decrypt(
                 encoded_url_path.encode(self.encoding)).decode(
@@ -141,11 +140,28 @@ class Configuration(object):
                     self.encoding)
         data = json.loads(payload)
 
-        # TODO Add metadata and webhook handling
+        metadata = {}
+        if not self.include_default_metadata and self.default_metadata:
+            metadata.update(self.default_metadata)
+        metadata.update(data.get("metadata", {}))
+
+        if self.include_webhook_url:
+            webhook_url = data.get("webhook")
+        else:
+            webhook_url = self.webhook_url
+
         return TrackingResult(
             is_click_tracking=True,
             tracked_url=data["url"],
-            request_data=request_data)
+            webhook_url=webhook_url,
+            metadata=metadata,
+            request_data=request_data,
+        )
+
+    def get_tracking_url_path(self, url):
+        """TODO
+        """
+        return url[len(self.base_click_tracking_url):]
 
 
 class TrackingResult(object):
@@ -201,6 +217,14 @@ def get_click_tracking_result(
     configuration = get_configuration(configuration, kwargs)
     return configuration.get_click_tracking_result(
         encoded_url_path, request_data)
+
+
+def get_tracking_url_path(
+        url, configuration=None, **kwargs):
+    """
+    """
+    configuration = get_configuration(configuration, kwargs)
+    return configuration.get_tracking_url_path(url)
 
 
 def get_request_data(request):
