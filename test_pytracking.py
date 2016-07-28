@@ -13,6 +13,12 @@ try:
 except ImportError:
     support_crypto = False
 
+try:
+    import ipware  # noqa
+    support_django = True
+except ImportError:
+    support_django = False
+
 DEFAULT_URL_TO_TRACK = "https://www.bob.com/hello-world/?token=valueééé"
 
 DEFAULT_BASE_CLICK_TRACKING_URL = "https://a.b.com/tracking/"
@@ -44,6 +50,11 @@ DEFAULT_CONFIGURATION = Configuration(
     base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL,
     base_click_tracking_url=DEFAULT_BASE_CLICK_TRACKING_URL,
     default_metadata=DEFAULT_DEFAULT_METADATA)
+
+
+class FakeDjangoRequest(object):
+    def __init__(self):
+        self.META = {}
 
 
 def test_basic_get_click_tracking_url():
@@ -145,3 +156,26 @@ def test_minimal_encrypted_get_click_tracking_url():
     assert tracking_result.metadata == expected_metadata
     assert tracking_result.is_click_tracking
     assert not tracking_result.is_open_tracking
+
+
+@pytest.fixture
+def tracking_django():
+    # Must call configure before importing tracking_django
+    from django.conf import settings
+    settings.configure()
+
+    from pytracking import django as tracking_django
+
+    return tracking_django
+
+
+@pytest.mark.skipif(
+    not support_django, reason="Django-support lib not installed")
+def test_get_django_request_data(tracking_django):
+    request = FakeDjangoRequest()
+    request.META["HTTP_X_REAL_IP"] = "10.10.240.22"
+    request.META["HTTP_USER_AGENT"] = "Firefox"
+
+    request_data = tracking_django.get_request_data(request)
+
+    assert request_data == {"user_agent": "Firefox", "user_ip": "10.10.240.22"}

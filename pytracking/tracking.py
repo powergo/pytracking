@@ -225,9 +225,3 @@ def get_tracking_url_path(
     """
     configuration = get_configuration(configuration, kwargs)
     return configuration.get_tracking_url_path(url)
-
-
-def get_request_data(request):
-    """TODO extract data from Django or Flask
-    """
-    pass

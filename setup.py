@@ -77,6 +77,7 @@ setup(
         'test': ['tox>=2.3.1', 'pytest>=2.9.2'],
         'html': ['lxml>=3.6.1', 'pytest>=2.9.2'],
         'crypto': ['cryptography>=1.4'],
+        'django': ['django-ipware>=1.1.5', 'django>=1.7']
     },
 
     # If there are data files included in your packages that need to be
