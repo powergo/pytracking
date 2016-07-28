@@ -3,8 +3,10 @@ import copy
 import pytest
 
 from pytracking import (
-    Configuration, get_click_tracking_url, get_tracking_url_path,
-    get_click_tracking_result)
+    Configuration, get_click_tracking_url, get_click_tracking_url_path,
+    get_open_tracking_url_path,
+    get_click_tracking_result, get_open_tracking_pixel, get_open_tracking_url,
+    get_open_tracking_result)
 
 
 try:
@@ -57,6 +59,62 @@ class FakeDjangoRequest(object):
         self.META = {}
 
 
+def test_get_open_tracking_pixel():
+    (pixel, mime) = get_open_tracking_pixel()
+    assert len(pixel) == 68
+    assert mime == "image/png"
+
+
+def test_basic_get_open_tracking_url():
+    url = get_open_tracking_url(
+        base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL)
+    assert url == "https://a.b.com/tracking/open/e30="
+
+
+def test_in_config_open_tracking_url():
+    url = get_open_tracking_url(
+        base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL,
+        metadata=DEFAULT_METADATA)
+    path = get_open_tracking_url_path(
+        url, base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL)
+
+    tracking_result = get_open_tracking_result(
+        path, webhook_url=DEFAULT_WEBHOOK_URL)
+    assert tracking_result.tracked_url is None
+    assert tracking_result.webhook_url == DEFAULT_WEBHOOK_URL
+    assert tracking_result.request_data is None
+    assert tracking_result.metadata == DEFAULT_METADATA
+    assert tracking_result.is_open_tracking
+    assert not tracking_result.is_click_tracking
+
+
+def test_embedded_open_tracking_url():
+    url = get_open_tracking_url(
+        base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL,
+        webhook_url=DEFAULT_WEBHOOK_URL,
+        include_webhook_url=True,
+        default_metadata=DEFAULT_DEFAULT_METADATA,
+        include_default_metadata=True,
+        metadata=DEFAULT_METADATA)
+    path = get_open_tracking_url_path(
+        url, base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL)
+
+    tracking_result = get_open_tracking_result(
+        path, request_data=DEFAULT_REQUEST_DATA,
+        include_default_metadata=True,
+        include_webhook_url=True)
+
+    expected_metadata = copy.copy(DEFAULT_DEFAULT_METADATA)
+    expected_metadata.update(DEFAULT_METADATA)
+
+    assert tracking_result.tracked_url is None
+    assert tracking_result.webhook_url == DEFAULT_WEBHOOK_URL
+    assert tracking_result.request_data == DEFAULT_REQUEST_DATA
+    assert tracking_result.metadata == expected_metadata
+    assert tracking_result.is_open_tracking
+    assert not tracking_result.is_click_tracking
+
+
 def test_basic_get_click_tracking_url():
     url = get_click_tracking_url(
         DEFAULT_URL_TO_TRACK,
@@ -70,7 +128,7 @@ def test_in_config_click_tracking_url():
         DEFAULT_URL_TO_TRACK,
         base_click_tracking_url=DEFAULT_BASE_CLICK_TRACKING_URL,
         metadata=DEFAULT_METADATA)
-    path = get_tracking_url_path(
+    path = get_click_tracking_url_path(
         url, base_click_tracking_url=DEFAULT_BASE_CLICK_TRACKING_URL)
 
     tracking_result = get_click_tracking_result(
@@ -92,7 +150,7 @@ def test_embedded_click_tracking_url():
         default_metadata=DEFAULT_DEFAULT_METADATA,
         include_default_metadata=True,
         metadata=DEFAULT_METADATA)
-    path = get_tracking_url_path(
+    path = get_click_tracking_url_path(
         url, base_click_tracking_url=DEFAULT_BASE_CLICK_TRACKING_URL)
 
     tracking_result = get_click_tracking_result(
@@ -113,12 +171,57 @@ def test_embedded_click_tracking_url():
 
 @pytest.mark.skipif(
     not support_crypto, reason="Cryptography lib not installed")
+def test_basic_encrypted_get_open_tracking_url():
+    url = get_open_tracking_url(
+        base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL,
+        encryption_bytestring_key=DEFAULT_ENCRYPTION_KEY)
+    path = get_open_tracking_url_path(
+        url, base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL)
+    key = Fernet(DEFAULT_ENCRYPTION_KEY)
+
+    # Can decrypt without raising an exception
+    value = key.decrypt(path.encode("utf-8"))
+    # We can only assert if the value is truthy because the value is encrypted
+    # with a different salt each time.
+    assert value
+
+
+@pytest.mark.skipif(
+    not support_crypto, reason="Cryptography lib not installed")
+def test_minimal_encrypted_get_open_tracking_url():
+    url = get_open_tracking_url(
+        base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL,
+        metadata=DEFAULT_METADATA,
+        encryption_bytestring_key=DEFAULT_ENCRYPTION_KEY)
+    path = get_open_tracking_url_path(
+        url, base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL)
+
+    tracking_result = get_open_tracking_result(
+        path,
+        request_data=DEFAULT_REQUEST_DATA,
+        default_metadata=DEFAULT_DEFAULT_METADATA,
+        webhook_url=DEFAULT_WEBHOOK_URL,
+        encryption_bytestring_key=DEFAULT_ENCRYPTION_KEY)
+
+    expected_metadata = copy.copy(DEFAULT_DEFAULT_METADATA)
+    expected_metadata.update(DEFAULT_METADATA)
+
+    assert tracking_result.tracked_url is None
+    assert tracking_result.webhook_url == DEFAULT_WEBHOOK_URL
+    assert tracking_result.request_data == DEFAULT_REQUEST_DATA
+    assert tracking_result.metadata == expected_metadata
+    assert tracking_result.is_open_tracking
+    assert not tracking_result.is_click_tracking
+
+
+@pytest.mark.skipif(
+    not support_crypto, reason="Cryptography lib not installed")
 def test_basic_encrypted_get_click_tracking_url():
     url = get_click_tracking_url(
         DEFAULT_URL_TO_TRACK,
         base_click_tracking_url=DEFAULT_BASE_CLICK_TRACKING_URL,
         encryption_bytestring_key=DEFAULT_ENCRYPTION_KEY)
-    path = get_tracking_url_path(
+    path = get_click_tracking_url_path(
         url, base_click_tracking_url=DEFAULT_BASE_CLICK_TRACKING_URL)
     key = Fernet(DEFAULT_ENCRYPTION_KEY)
 
@@ -137,7 +240,7 @@ def test_minimal_encrypted_get_click_tracking_url():
         base_click_tracking_url=DEFAULT_BASE_CLICK_TRACKING_URL,
         metadata=DEFAULT_METADATA,
         encryption_bytestring_key=DEFAULT_ENCRYPTION_KEY)
-    path = get_tracking_url_path(
+    path = get_click_tracking_url_path(
         url, base_click_tracking_url=DEFAULT_BASE_CLICK_TRACKING_URL)
 
     tracking_result = get_click_tracking_result(

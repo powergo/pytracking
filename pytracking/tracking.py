@@ -10,6 +10,12 @@ except ImportError:
     pass
 
 
+TRACKING_PIXEL = base64.b64decode(
+    b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=')  # noqa
+
+PNG_MIME_TYPE = "image/png"
+
+
 class Configuration(object):
 
     def __init__(
@@ -82,7 +88,9 @@ class Configuration(object):
         :param url_to_track:
         :param meta_data:
         """
-        data = {"url": url_to_track}
+        data = {}
+        if url_to_track:
+            data["url"] = url_to_track
         metadata = {}
 
         if self.include_default_metadata and self.default_metadata:
@@ -112,10 +120,20 @@ class Configuration(object):
 
         return data_str
 
+    def get_open_tracking_url_from_data_str(self, data_str):
+        """TODO
+        """
+        return urljoin(self.base_open_tracking_url, data_str)
+
     def get_click_tracking_url_from_data_str(self, data_str):
         """TODO
         """
         return urljoin(self.base_click_tracking_url, data_str)
+
+    def get_open_tracking_url(self, extra_metadata):
+        data_to_embed = self.get_data_to_embed(None, extra_metadata)
+        data_str = self.get_url_encoded_data_str(data_to_embed)
+        return self.get_open_tracking_url_from_data_str(data_str)
 
     def get_click_tracking_url(self, url_to_track, extra_metadata):
         """TODO
@@ -124,7 +142,7 @@ class Configuration(object):
         data_str = self.get_url_encoded_data_str(data_to_embed)
         return self.get_click_tracking_url_from_data_str(data_str)
 
-    def get_click_tracking_result(self, encoded_url_path, request_data):
+    def get_open_tracking_result(self, encoded_url_path, request_data):
         """TODO
         """
         if encoded_url_path.startswith("/"):
@@ -152,16 +170,57 @@ class Configuration(object):
 
         return TrackingResult(
             is_click_tracking=True,
-            tracked_url=data["url"],
+            tracked_url=data.get("url"),
             webhook_url=webhook_url,
             metadata=metadata,
             request_data=request_data,
         )
 
-    def get_tracking_url_path(self, url):
+    def get_tracking_result(
+            self, encoded_url_path, request_data, is_open):
+        """TODO
+        """
+        if encoded_url_path.startswith("/"):
+            encoded_url_path = encoded_url_path[1:]
+
+        if self.encryption_key:
+            payload = self.encryption_key.decrypt(
+                encoded_url_path.encode(self.encoding)).decode(
+                    self.encoding)
+        else:
+            payload = base64.urlsafe_b64decode(
+                encoded_url_path.encode(self.encoding)).decode(
+                    self.encoding)
+        data = json.loads(payload)
+
+        metadata = {}
+        if not self.include_default_metadata and self.default_metadata:
+            metadata.update(self.default_metadata)
+        metadata.update(data.get("metadata", {}))
+
+        if self.include_webhook_url:
+            webhook_url = data.get("webhook")
+        else:
+            webhook_url = self.webhook_url
+
+        return TrackingResult(
+            is_open_tracking=is_open,
+            is_click_tracking=not is_open,
+            tracked_url=data.get("url"),
+            webhook_url=webhook_url,
+            metadata=metadata,
+            request_data=request_data,
+        )
+
+    def get_click_tracking_url_path(self, url):
         """TODO
         """
         return url[len(self.base_click_tracking_url):]
+
+    def get_open_tracking_url_path(self, url):
+        """TODO
+        """
+        return url[len(self.base_open_tracking_url):]
 
 
 class TrackingResult(object):
@@ -201,6 +260,21 @@ def get_configuration(configuration, kwargs):
     return configuration
 
 
+def get_open_tracking_url(metadata=None, configuration=None, **kwargs):
+    """TODO
+    """
+    configuration = get_configuration(configuration, kwargs)
+
+    return configuration.get_open_tracking_url(metadata)
+
+
+def get_open_tracking_pixel():
+    """Returns a tuple consisting of a binary string (the transparent PNG
+    pixel) and the MIME type.
+    """
+    return (TRACKING_PIXEL, PNG_MIME_TYPE)
+
+
 def get_click_tracking_url(
         url_to_track, metadata=None, configuration=None, **kwargs):
     """TODO
@@ -215,13 +289,30 @@ def get_click_tracking_result(
     """TODO
     """
     configuration = get_configuration(configuration, kwargs)
-    return configuration.get_click_tracking_result(
-        encoded_url_path, request_data)
+    return configuration.get_tracking_result(
+        encoded_url_path, request_data, is_open=False)
 
 
-def get_tracking_url_path(
+def get_click_tracking_url_path(
         url, configuration=None, **kwargs):
     """
     """
     configuration = get_configuration(configuration, kwargs)
-    return configuration.get_tracking_url_path(url)
+    return configuration.get_click_tracking_url_path(url)
+
+
+def get_open_tracking_result(
+        encoded_url_path, request_data=None, configuration=None, **kwargs):
+    """TODO
+    """
+    configuration = get_configuration(configuration, kwargs)
+    return configuration.get_tracking_result(
+        encoded_url_path, request_data, is_open=True)
+
+
+def get_open_tracking_url_path(
+        url, configuration=None, **kwargs):
+    """
+    """
+    configuration = get_configuration(configuration, kwargs)
+    return configuration.get_open_tracking_url_path(url)
