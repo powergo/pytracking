@@ -1,3 +1,5 @@
+from itertools import chain
+
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
 # To use a consistent encoding
@@ -9,6 +11,18 @@ here = path.abspath(path.dirname(__file__))
 # Get the long description from the relevant file
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
+
+EXTRA_REQUIRES = {
+    'test': ['tox>=2.3.1', 'pytest>=2.9.2'],
+    'webhook': ['requests>=2.10.0'],
+    'html': ['lxml>=3.6.1', 'pytest>=2.9.2'],
+    'crypto': ['cryptography>=1.4'],
+    'django': ['django-ipware>=1.1.5', 'django>=1.7']
+}
+
+ALL_REQUIRE = list(chain(*EXTRA_REQUIRES.values()))
+
+EXTRA_REQUIRES["all"] = ALL_REQUIRE
 
 setup(
     name='pytracking',
@@ -66,19 +80,13 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        'requests>=2.10.0'
     ],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
     # for example:
     # $ pip install -e .[dev,test]
-    extras_require={
-        'test': ['tox>=2.3.1', 'pytest>=2.9.2'],
-        'html': ['lxml>=3.6.1', 'pytest>=2.9.2'],
-        'crypto': ['cryptography>=1.4'],
-        'django': ['django-ipware>=1.1.5', 'django>=1.7']
-    },
+    extras_require=EXTRA_REQUIRES,
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these
