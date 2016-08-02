@@ -15,11 +15,14 @@ TRACKING_PIXEL = base64.b64decode(
 
 PNG_MIME_TYPE = "image/png"
 
+DEFAULT_TIMEOUT_SECONDS = 5
+
 
 class Configuration(object):
 
     def __init__(
-            self, webhook_url=None, webhook_timeout_seconds=5,
+            self, webhook_url=None,
+            webhook_timeout_seconds=DEFAULT_TIMEOUT_SECONDS,
             include_webhook_url=False, base_open_tracking_url=None,
             base_click_tracking_url=None, default_metadata=None,
             include_default_metadata=False, encryption_bytestring_key=None,
