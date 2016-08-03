@@ -29,7 +29,7 @@ def adapt_html(
 
     new_html_text = html.tostring(tree)
 
-    return new_html_text
+    return new_html_text.decode("utf-8")
 
 
 def _replace_links(tree, extra_metadata, configuration):

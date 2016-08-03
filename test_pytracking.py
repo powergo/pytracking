@@ -1,5 +1,3 @@
-import copy
-
 from pytracking import (
     Configuration, get_click_tracking_url, get_click_tracking_url_path,
     get_open_tracking_url_path,
@@ -25,6 +23,11 @@ DEFAULT_DEFAULT_METADATA = {
     "keyéé": "valèèè",
     "param3": "val3"
 }
+
+
+EXPECTED_METADATA = {}
+EXPECTED_METADATA.update(DEFAULT_DEFAULT_METADATA)
+EXPECTED_METADATA.update(DEFAULT_METADATA)
 
 DEFAULT_WEBHOOK_URL = "https://webhook.com/tracking/"
 
@@ -85,13 +88,10 @@ def test_embedded_open_tracking_url():
         include_default_metadata=True,
         include_webhook_url=True)
 
-    expected_metadata = copy.copy(DEFAULT_DEFAULT_METADATA)
-    expected_metadata.update(DEFAULT_METADATA)
-
     assert tracking_result.tracked_url is None
     assert tracking_result.webhook_url == DEFAULT_WEBHOOK_URL
     assert tracking_result.request_data == DEFAULT_REQUEST_DATA
-    assert tracking_result.metadata == expected_metadata
+    assert tracking_result.metadata == EXPECTED_METADATA
     assert tracking_result.is_open_tracking
     assert not tracking_result.is_click_tracking
 
@@ -139,12 +139,10 @@ def test_embedded_click_tracking_url():
         include_default_metadata=True,
         include_webhook_url=True)
 
-    expected_metadata = copy.copy(DEFAULT_DEFAULT_METADATA)
-    expected_metadata.update(DEFAULT_METADATA)
 
     assert tracking_result.tracked_url == DEFAULT_URL_TO_TRACK
     assert tracking_result.webhook_url == DEFAULT_WEBHOOK_URL
     assert tracking_result.request_data == DEFAULT_REQUEST_DATA
-    assert tracking_result.metadata == expected_metadata
+    assert tracking_result.metadata == EXPECTED_METADATA
     assert tracking_result.is_click_tracking
     assert not tracking_result.is_open_tracking

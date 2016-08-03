@@ -6,7 +6,7 @@ from pytracking.tracking import (
 from test_pytracking import (
     DEFAULT_BASE_OPEN_TRACKING_URL, DEFAULT_BASE_CLICK_TRACKING_URL,
     DEFAULT_METADATA, DEFAULT_WEBHOOK_URL, DEFAULT_DEFAULT_METADATA,
-    DEFAULT_URL_TO_TRACK)
+    DEFAULT_URL_TO_TRACK, EXPECTED_METADATA)
 
 DEFAULT_ENCODED_URL_TO_TRACK =\
     "https://www.bob.com/hello-world/?token=value%C3%A9%C3%A9%C3%A9"
@@ -74,13 +74,9 @@ def test_get_tracking_result(setup_django):
     tracking_result = tracking_django.get_tracking_result(
         request, path, True, configuration)
 
-    expected_metadata = {}
-    expected_metadata.update(DEFAULT_DEFAULT_METADATA)
-    expected_metadata.update(DEFAULT_METADATA)
-
     assert tracking_result.request_data ==\
         {"user_agent": "Firefox", "user_ip": "10.10.240.22"}
-    assert tracking_result.metadata == expected_metadata
+    assert tracking_result.metadata == EXPECTED_METADATA
 
 
 def test_valid_click_tracking_view(setup_django):
@@ -106,11 +102,7 @@ def test_valid_click_tracking_view(setup_django):
 
     response = TestClickView.as_view()(request, path)
 
-    expected_metadata = {}
-    expected_metadata.update(DEFAULT_DEFAULT_METADATA)
-    expected_metadata.update(DEFAULT_METADATA)
-
-    assert expected_metadata == result_metadata
+    assert EXPECTED_METADATA == result_metadata
     assert request_data ==\
         {"user_agent": "Firefox", "user_ip": "10.10.240.22"}
     assert response.status_code == 302
@@ -193,11 +185,7 @@ def test_valid_open_tracking_view(setup_django):
 
     response = TestOpenView.as_view()(request, path)
 
-    expected_metadata = {}
-    expected_metadata.update(DEFAULT_DEFAULT_METADATA)
-    expected_metadata.update(DEFAULT_METADATA)
-
-    assert expected_metadata == result_metadata
+    assert EXPECTED_METADATA == result_metadata
     assert request_data ==\
         {"user_agent": "Firefox", "user_ip": "10.10.240.22"}
     assert response.status_code == 200
