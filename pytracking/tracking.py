@@ -29,16 +29,24 @@ class Configuration(object):
             encoding="utf-8", **kwargs):
         """
 
-        :param webhook_url:
-        :param webhook_timeout_seconds:
-        :param include_webhook_url:
-        :param base_open_tracking_url:
-        :param base_click_tracking_url:
-        :param default_metadata:
-        :param include_default_metadata:
-        :param encryption_bytestring_key:
-        :param encoding:
-        :param kwargs:
+        :param webhook_url: The webhook to notify when a click or open is
+            registered.
+        :param webhook_timeout_seconds: Raises a timeout if the webhook does
+            not response before the value. Default to None
+        :param include_webhook_url: If True, the webhook URL is included in the
+            encoded link. Default to False.
+        :param base_open_tracking_url: The base URL to prepend to the encoded
+            open tracking link.
+        :param base_click_tracking_url: The base URL to prepend to the encoded
+            click tracking link.
+        :param default_metadata: Default metadata to associated with all
+            tracking events.
+        :param include_default_metadata: If True, the default metadata is
+            included in the encoded link. Default to False.
+        :param encryption_bytestring_key: The encryption key given by Fernet.
+        :param encoding: The encoding to use to encode and decode the tracking
+            link. Default to utf-8.
+        :param kwargs: Other args
         """
         self.webhook_url = webhook_url
         self.webhook_timeout_seconds = webhook_timeout_seconds

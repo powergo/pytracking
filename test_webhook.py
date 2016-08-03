@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from pytracking.tracking import (
+from pytracking import (
     get_click_tracking_url, get_click_tracking_url_path,
     get_click_tracking_result, DEFAULT_TIMEOUT_SECONDS)
 from test_pytracking import (

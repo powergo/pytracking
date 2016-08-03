@@ -1,6 +1,6 @@
 import pytest
 
-from pytracking.tracking import (
+from pytracking import (
     get_click_tracking_url_path, get_open_tracking_url_path,
     get_open_tracking_result, get_click_tracking_result)
 
