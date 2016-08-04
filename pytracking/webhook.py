@@ -4,7 +4,25 @@ from pytracking.tracking import get_configuration
 
 
 def send_webhook(tracking_result, configuration=None, **kwargs):
-    """TODO
+    """Sends a POST request to the webhook URL specified in tracking_result.
+
+    The POST request will have a body of type application/json that contains a
+    json representation of the tracking result:
+
+    ::
+
+        {
+            "is_click_tracking": True,
+            "metadata": {...},
+            "request_data": None,
+            "tracked_url": "http://..."
+        }
+
+    :param tracking_result: The TrackingResult instance to post to a webhook.
+    :param configuration: An optional Configuration instance.
+    :param kwargs: Optional configuration parameters. If provided with a
+        Configuration instance, the kwargs parameters will override the
+        Configuration parameters.
     """
     configuration = get_configuration(configuration, kwargs)
 

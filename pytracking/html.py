@@ -15,7 +15,20 @@ DEFAULT_ATTRIBUTES = {
 def adapt_html(
         html_text, extra_metadata, click_tracking=True, open_tracking=True,
         configuration=None, **kwargs):
-    """TODO
+    """Changes an HTML string by replacing links (<a href...>) with tracking
+    links and by adding a 1x1 transparent pixel just before the closing body
+    tag.
+
+    :param html_text: The HTML to change (unicode or bytestring).
+    :param extra_metadata: A dict that can be json-encoded and that will
+        be encoded in the tracking link.
+    :param click_tracking: If links (<a href...>) must be changed.
+    :param open_tracking: If a transparent pixel must be added before the
+        closing body tag.
+    :param configuration: An optional Configuration instance.
+    :param kwargs: Optional configuration parameters. If provided with a
+        Configuration instance, the kwargs parameters will override the
+        Configuration parameters.
     """
     configuration = get_configuration(configuration, kwargs)
 

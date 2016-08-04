@@ -240,12 +240,14 @@ class TrackingResult(object):
                  tracked_url=None, webhook_url=None,
                  metadata=None, request_data=None):
         """
-        :param is_open_tracking:
-        :param is_click_tracking:
-        :param tracked_url:
-        :param webhook_url:
-        :param metadata:
-        :param request_data:
+        :param is_open_tracking: If the result is about open tracking.
+        :param is_click_tracking: If the result is about click tracking.
+        :param tracked_url: The URL to redirect to. Provided only if
+            is_click_tracking is True
+        :param webhook_url: The webhook URL to send the tracking notification.
+        :param metadata: The metadata (dict) associated with a tracking link.
+        :param request_data: The request data (dict) associated with the client
+            that made the request to the tracking link.
         """
         self.is_open_tracking = is_open_tracking
         self.is_click_tracking = is_click_tracking
@@ -262,7 +264,11 @@ class TrackingResult(object):
 
 
 def get_configuration(configuration, kwargs):
-    """TODO
+    """Returns a Configuration instance that merges a configuration instance
+    and individual parameters given in a dictionary (usually, the **kwargs of
+    an API function).
+
+    The kwargs parameters take precendence over the Configuration instance.
     """
     if configuration:
         configuration = configuration.merge_with_kwargs(kwargs)
@@ -272,7 +278,15 @@ def get_configuration(configuration, kwargs):
 
 
 def get_open_tracking_url(metadata=None, configuration=None, **kwargs):
-    """TODO
+    """Returns a tracking URL encoding the metadata and other information
+    specified in the configuration or kwargs.
+
+    :param metadata: A dict that can be json-encoded and that will be encoded
+        in the tracking link.
+    :param configuration: An optional Configuration instance.
+    :param kwargs: Optional configuration parameters. If provided with a
+        Configuration instance, the kwargs parameters will override the
+        Configuration parameters.
     """
     configuration = get_configuration(configuration, kwargs)
 
@@ -288,7 +302,16 @@ def get_open_tracking_pixel():
 
 def get_click_tracking_url(
         url_to_track, metadata=None, configuration=None, **kwargs):
-    """TODO
+    """Returns a tracking URL encoding the link to track, the provided
+    metadata, and other information specified in the configuration or kwargs.
+
+    :param url_to_track: The URL to track.
+    :param metadata: A dict that can be json-encoded and that will be encoded
+        in the tracking link.
+    :param configuration: An optional Configuration instance.
+    :param kwargs: Optional configuration parameters. If provided with a
+        Configuration instance, the kwargs parameters will override the
+        Configuration parameters.
     """
     configuration = get_configuration(configuration, kwargs)
 
@@ -297,7 +320,17 @@ def get_click_tracking_url(
 
 def get_click_tracking_result(
         encoded_url_path, request_data=None, configuration=None, **kwargs):
-    """TODO
+    """Get a TrackingResult instance from an encoded click tracking link.
+
+    :param encoded_url_path: The part of the URL that is encoded and contains
+        the tracking information.
+    :param request_data: The dictionary to attach to the TrackingResult
+        representing the information (e.g., user agent) of the client that
+        requested the tracking link.
+    :param configuration: An optional Configuration instance.
+    :param kwargs: Optional configuration parameters. If provided with a
+        Configuration instance, the kwargs parameters will override the
+        Configuration parameters.
     """
     configuration = get_configuration(configuration, kwargs)
     return configuration.get_tracking_result(
@@ -306,7 +339,15 @@ def get_click_tracking_result(
 
 def get_click_tracking_url_path(
         url, configuration=None, **kwargs):
-    """
+    """Get a part of a URL that contains the encoded click tracking
+    information. This is the part that needs to be supplied to
+    get_click_tracking_result.
+
+    :param url: The full tracking URL
+    :param configuration: An optional Configuration instance.
+    :param kwargs: Optional configuration parameters. If provided with a
+        Configuration instance, the kwargs parameters will override the
+        Configuration parameters.
     """
     configuration = get_configuration(configuration, kwargs)
     return configuration.get_click_tracking_url_path(url)
@@ -314,7 +355,17 @@ def get_click_tracking_url_path(
 
 def get_open_tracking_result(
         encoded_url_path, request_data=None, configuration=None, **kwargs):
-    """TODO
+    """Get a TrackingResult instance from an encoded open tracking link.
+
+    :param encoded_url_path: The part of the URL that is encoded and contains
+        the tracking information.
+    :param request_data: The dictionary to attach to the TrackingResult
+        representing the information (e.g., user agent) of the client that
+        requested the tracking link.
+    :param configuration: An optional Configuration instance.
+    :param kwargs: Optional configuration parameters. If provided with a
+        Configuration instance, the kwargs parameters will override the
+        Configuration parameters.
     """
     configuration = get_configuration(configuration, kwargs)
     return configuration.get_tracking_result(
@@ -323,7 +374,15 @@ def get_open_tracking_result(
 
 def get_open_tracking_url_path(
         url, configuration=None, **kwargs):
-    """
+    """Get a part of a URL that contains the encoded open tracking
+    information. This is the part that needs to be supplied to
+    get_open_tracking_result.
+
+    :param url: The full tracking URL
+    :param configuration: An optional Configuration instance.
+    :param kwargs: Optional configuration parameters. If provided with a
+        Configuration instance, the kwargs parameters will override the
+        Configuration parameters.
     """
     configuration = get_configuration(configuration, kwargs)
     return configuration.get_open_tracking_url_path(url)
