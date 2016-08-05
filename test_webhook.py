@@ -36,7 +36,8 @@ def test_send_webhook():
         "is_click_tracking": True,
         "metadata": DEFAULT_METADATA,
         "request_data": None,
-        "tracked_url": DEFAULT_URL_TO_TRACK
+        "tracked_url": DEFAULT_URL_TO_TRACK,
+        "timestamp": tracking_result.timestamp,
     }
 
     with patch("pytracking.webhook.requests.post") as mocked_post:

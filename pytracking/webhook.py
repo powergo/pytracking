@@ -29,7 +29,8 @@ def send_webhook(tracking_result, configuration=None, **kwargs):
     payload = {
         "is_click_tracking": tracking_result.is_click_tracking,
         "metadata": tracking_result.metadata,
-        "request_data": tracking_result.request_data
+        "request_data": tracking_result.request_data,
+        "timestamp": tracking_result.timestamp
     }
 
     if tracking_result.tracked_url:

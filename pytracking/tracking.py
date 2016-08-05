@@ -1,6 +1,7 @@
 import base64
 from copy import deepcopy
 import json
+import time
 from urllib.parse import urljoin
 
 try:
@@ -153,44 +154,11 @@ class Configuration(object):
         data_str = self.get_url_encoded_data_str(data_to_embed)
         return self.get_click_tracking_url_from_data_str(data_str)
 
-    def get_open_tracking_result(self, encoded_url_path, request_data):
-        """TODO
-        """
-        if encoded_url_path.startswith("/"):
-            encoded_url_path = encoded_url_path[1:]
-
-        if self.encryption_key:
-            payload = self.encryption_key.decrypt(
-                encoded_url_path.encode(self.encoding)).decode(
-                    self.encoding)
-        else:
-            payload = base64.urlsafe_b64decode(
-                encoded_url_path.encode(self.encoding)).decode(
-                    self.encoding)
-        data = json.loads(payload)
-
-        metadata = {}
-        if not self.include_default_metadata and self.default_metadata:
-            metadata.update(self.default_metadata)
-        metadata.update(data.get("metadata", {}))
-
-        if self.include_webhook_url:
-            webhook_url = data.get("webhook")
-        else:
-            webhook_url = self.webhook_url
-
-        return TrackingResult(
-            is_click_tracking=True,
-            tracked_url=data.get("url"),
-            webhook_url=webhook_url,
-            metadata=metadata,
-            request_data=request_data,
-        )
-
     def get_tracking_result(
             self, encoded_url_path, request_data, is_open):
         """TODO
         """
+        timestamp = int(time.time())
         if encoded_url_path.startswith("/"):
             encoded_url_path = encoded_url_path[1:]
 
@@ -221,6 +189,7 @@ class Configuration(object):
             webhook_url=webhook_url,
             metadata=metadata,
             request_data=request_data,
+            timestamp=timestamp,
         )
 
     def get_click_tracking_url_path(self, url):
@@ -238,7 +207,7 @@ class TrackingResult(object):
 
     def __init__(self, is_open_tracking=False, is_click_tracking=False,
                  tracked_url=None, webhook_url=None,
-                 metadata=None, request_data=None):
+                 metadata=None, request_data=None, timestamp=None):
         """
         :param is_open_tracking: If the result is about open tracking.
         :param is_click_tracking: If the result is about click tracking.
@@ -248,6 +217,7 @@ class TrackingResult(object):
         :param metadata: The metadata (dict) associated with a tracking link.
         :param request_data: The request data (dict) associated with the client
             that made the request to the tracking link.
+        :param timestamp: Number of seconds since epoch in UTC
         """
         self.is_open_tracking = is_open_tracking
         self.is_click_tracking = is_click_tracking
@@ -255,6 +225,7 @@ class TrackingResult(object):
         self.webhook_url = webhook_url
         self.metadata = metadata
         self.request_data = request_data
+        self.timestamp = timestamp
 
     def __str__(self):
         return "<pytracking.TrackingResult> is_open_tracking: {0} "\
