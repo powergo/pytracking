@@ -337,8 +337,6 @@ To use the webhook feature, you must install pytracking with
 
     # Assumes that the webhook url is encoded in the url.
     full_url = "https://trackingdomain.com/path/e30203jhd9239754jh21387293jhf989sda="
-    url_path = pytracking.get_click_tracking_url_path(
-        full_url, base_click_tracking_url="https://trackingdomain.com/path/")
     tracking_result = pytracking.get_open_tracking_result(
         url_path, base_click_tracking_url="https://trackingdomain.com/path/")
 
