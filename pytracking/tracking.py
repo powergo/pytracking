@@ -71,6 +71,14 @@ class Configuration(object):
                 self.base_open_tracking_url, self.base_click_tracking_url,
                 self.webhook_url)
 
+    def __deepcopy__(self, memo):
+        new_config = Configuration()
+        for key, value in self.__dict__.items():
+            if key != "encryption_key":
+                new_config.__dict__[key] = deepcopy(value)
+
+        return new_config
+
     def merge_with_kwargs(self, kwargs):
         """
 
