@@ -72,6 +72,23 @@ def test_in_config_open_tracking_url():
     assert not tracking_result.is_click_tracking
 
 
+def test_in_config_open_tracking_full_url():
+    url = get_open_tracking_url(
+        base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL,
+        metadata=DEFAULT_METADATA)
+
+    tracking_result = get_open_tracking_result(
+        url, webhook_url=DEFAULT_WEBHOOK_URL,
+        base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL)
+
+    assert tracking_result.tracked_url is None
+    assert tracking_result.webhook_url == DEFAULT_WEBHOOK_URL
+    assert tracking_result.request_data is None
+    assert tracking_result.metadata == DEFAULT_METADATA
+    assert tracking_result.is_open_tracking
+    assert not tracking_result.is_click_tracking
+
+
 def test_embedded_open_tracking_url():
     url = get_open_tracking_url(
         base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL,
@@ -122,6 +139,23 @@ def test_in_config_click_tracking_url():
     assert not tracking_result.is_open_tracking
 
 
+def test_in_config_click_tracking_full_url():
+    url = get_click_tracking_url(
+        DEFAULT_URL_TO_TRACK,
+        base_click_tracking_url=DEFAULT_BASE_CLICK_TRACKING_URL,
+        metadata=DEFAULT_METADATA)
+
+    tracking_result = get_click_tracking_result(
+        url, webhook_url=DEFAULT_WEBHOOK_URL,
+        base_click_tracking_url=DEFAULT_BASE_CLICK_TRACKING_URL)
+    assert tracking_result.tracked_url == DEFAULT_URL_TO_TRACK
+    assert tracking_result.webhook_url == DEFAULT_WEBHOOK_URL
+    assert tracking_result.request_data is None
+    assert tracking_result.metadata == DEFAULT_METADATA
+    assert tracking_result.is_click_tracking
+    assert not tracking_result.is_open_tracking
+
+
 def test_embedded_click_tracking_url():
     url = get_click_tracking_url(
         DEFAULT_URL_TO_TRACK,
@@ -138,7 +172,6 @@ def test_embedded_click_tracking_url():
         path, request_data=DEFAULT_REQUEST_DATA,
         include_default_metadata=True,
         include_webhook_url=True)
-
 
     assert tracking_result.tracked_url == DEFAULT_URL_TO_TRACK
     assert tracking_result.webhook_url == DEFAULT_WEBHOOK_URL

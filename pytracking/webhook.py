@@ -15,7 +15,8 @@ def send_webhook(tracking_result, configuration=None, **kwargs):
             "is_click_tracking": True,
             "metadata": {...},
             "request_data": None,
-            "tracked_url": "http://..."
+            "tracked_url": "http://...",
+            "timestamp": 1389177318
         }
 
     :param tracking_result: The TrackingResult instance to post to a webhook.

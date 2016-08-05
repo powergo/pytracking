@@ -145,10 +145,8 @@ Get Open Tracking Data from URL
     import pytracking
 
     full_url = "https://trackingdomain.com/path/e30203jhd9239754jh21387293jhf989sda="
-    url_path = pytracking.get_open_tracking_url_path(
-        full_url, base_open_tracking_url="https://trackingdomain.com/path/")
     tracking_result = pytracking.get_open_tracking_result(
-        url_path, base_open_tracking_url="https://trackingdomain.com/path/")
+        full_url, base_open_tracking_url="https://trackingdomain.com/path/")
 
     # Metadata is in tracking_result.metadata
     # Webhook URL is in tracking_result.webhook_url
@@ -162,10 +160,8 @@ Get Click Tracking Data from URL
     import pytracking
 
     full_url = "https://trackingdomain.com/path/e30203jhd9239754jh21387293jhf989sda="
-    url_path = pytracking.get_click_tracking_url_path(
-        full_url, base_click_tracking_url="https://trackingdomain.com/path/")
     tracking_result = pytracking.get_open_tracking_result(
-        url_path, base_click_tracking_url="https://trackingdomain.com/path/")
+        full_url, base_click_tracking_url="https://trackingdomain.com/path/")
 
     # Metadata is in tracking_result.metadata
     # Webhook URL is in tracking_result.webhook_url
@@ -210,11 +206,8 @@ Encrypting your data slightly increases the length of the generated URL.
         encryption_bytestring_key=key)
 
     # Decode
-    url_path = pytracking.get_click_tracking_url_path(
-        click_tracking_url,
-        base_click_tracking_url="https://trackingdomain.com/path/")
     tracking_result = pytracking.get_open_tracking_result(
-        url_path, base_click_tracking_url="https://trackingdomain.com/path/",
+        full_url, base_click_tracking_url="https://trackingdomain.com/path/",
         encryption_bytestring_key=key)
 
 
@@ -321,7 +314,7 @@ Add this to your urls.py file:
             "^open/(?P<path>[\w=-]+)/$", MyOpenTrackingView.as_view(),
             name="open_tracking"),
         url(
-            "^open/(?P<path>[\w=-]+)/$", MyClickTrackingView.as_view(),
+            "^click/(?P<path>[\w=-]+)/$", MyClickTrackingView.as_view(),
             name="click_tracking"),
     ]
 
@@ -354,7 +347,8 @@ To use the webhook feature, you must install pytracking with
     #    "is_click_tracking": True,
     #    "metadata": {...},
     #    "request_data": None,
-    #    "tracked_url": "http://..."
+    #    "tracked_url": "http://...",
+    #    "timestamp": 1389177318
     #  }
     send_webhook(tracking_result)
 

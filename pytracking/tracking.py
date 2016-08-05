@@ -294,7 +294,8 @@ def get_click_tracking_result(
     """Get a TrackingResult instance from an encoded click tracking link.
 
     :param encoded_url_path: The part of the URL that is encoded and contains
-        the tracking information.
+        the tracking information or the full URL (base_click_tracking_url must
+        be provided)
     :param request_data: The dictionary to attach to the TrackingResult
         representing the information (e.g., user agent) of the client that
         requested the tracking link.
@@ -304,6 +305,11 @@ def get_click_tracking_result(
         Configuration parameters.
     """
     configuration = get_configuration(configuration, kwargs)
+    if configuration.base_click_tracking_url and\
+            encoded_url_path.startswith(
+                configuration.base_click_tracking_url):
+        encoded_url_path = get_click_tracking_url_path(
+            encoded_url_path, configuration)
     return configuration.get_tracking_result(
         encoded_url_path, request_data, is_open=False)
 
@@ -329,7 +335,8 @@ def get_open_tracking_result(
     """Get a TrackingResult instance from an encoded open tracking link.
 
     :param encoded_url_path: The part of the URL that is encoded and contains
-        the tracking information.
+        the tracking information or the full URL (base_open_tracking_url must
+        be provided)
     :param request_data: The dictionary to attach to the TrackingResult
         representing the information (e.g., user agent) of the client that
         requested the tracking link.
@@ -339,6 +346,11 @@ def get_open_tracking_result(
         Configuration parameters.
     """
     configuration = get_configuration(configuration, kwargs)
+    if configuration.base_open_tracking_url and\
+            encoded_url_path.startswith(
+                configuration.base_open_tracking_url):
+        encoded_url_path = get_open_tracking_url_path(
+            encoded_url_path, configuration)
     return configuration.get_tracking_result(
         encoded_url_path, request_data, is_open=True)
 
