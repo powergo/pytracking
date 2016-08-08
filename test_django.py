@@ -82,10 +82,13 @@ def test_get_tracking_result(setup_django):
 def test_valid_click_tracking_view(setup_django):
     result_metadata = {}
     request_data = {}
+    full_tracking_result = {}
 
     class TestClickView(tracking_django.ClickTrackingView):
 
         def notify_tracking_event(self, tracking_result):
+            full_tracking_result.update(
+                tracking_result.to_json_dict()._asdict())
             result_metadata.update(tracking_result.metadata)
             request_data.update(tracking_result.request_data)
 
@@ -107,6 +110,8 @@ def test_valid_click_tracking_view(setup_django):
         {"user_agent": "Firefox", "user_ip": "10.10.240.22"}
     assert response.status_code == 302
     assert response["Location"] == DEFAULT_ENCODED_URL_TO_TRACK
+    assert not full_tracking_result["is_open_tracking"]
+    assert full_tracking_result["is_click_tracking"]
 
 
 def test_empty_click_tracking_view(setup_django):
@@ -166,10 +171,13 @@ def test_invalid_click_tracking_view(setup_django):
 def test_valid_open_tracking_view(setup_django):
     result_metadata = {}
     request_data = {}
+    full_tracking_result = {}
 
     class TestOpenView(tracking_django.OpenTrackingView):
 
         def notify_tracking_event(self, tracking_result):
+            full_tracking_result.update(
+                tracking_result.to_json_dict()._asdict())
             result_metadata.update(tracking_result.metadata)
             request_data.update(tracking_result.request_data)
 
@@ -191,6 +199,8 @@ def test_valid_open_tracking_view(setup_django):
     assert response.status_code == 200
     assert response.content == TRACKING_PIXEL
     assert response["Content-Type"] == PNG_MIME_TYPE
+    assert full_tracking_result["is_open_tracking"]
+    assert not full_tracking_result["is_click_tracking"]
 
 
 def test_invalid_open_tracking_view(setup_django):

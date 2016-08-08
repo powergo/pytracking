@@ -89,7 +89,7 @@ class OpenTrackingView(TrackingView):
 
         try:
             tracking_result = get_tracking_result(
-                request, path, False, configuration)
+                request, path, True, configuration)
         except Exception as e:
             self.notify_decoding_error(e)
             raise Http404
