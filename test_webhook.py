@@ -33,6 +33,7 @@ def test_send_webhook():
         path, webhook_url=DEFAULT_WEBHOOK_URL)
 
     payload = {
+        "is_open_tracking": False,
         "is_click_tracking": True,
         "metadata": DEFAULT_METADATA,
         "request_data": None,

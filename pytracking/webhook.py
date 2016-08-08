@@ -12,6 +12,7 @@ def send_webhook(tracking_result, configuration=None, **kwargs):
     ::
 
         {
+            "is_open_tracking": False,
             "is_click_tracking": True,
             "metadata": {...},
             "request_data": None,
@@ -28,6 +29,7 @@ def send_webhook(tracking_result, configuration=None, **kwargs):
     configuration = get_configuration(configuration, kwargs)
 
     payload = {
+        "is_open_tracking": tracking_result.is_open_tracking,
         "is_click_tracking": tracking_result.is_click_tracking,
         "metadata": tracking_result.metadata,
         "request_data": tracking_result.request_data,

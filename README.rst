@@ -342,6 +342,7 @@ To use the webhook feature, you must install pytracking with
 
     # Will send a POST request with the following json str body:
     #  {
+    #    "is_open_tracking": False,
     #    "is_click_tracking": True,
     #    "metadata": {...},
     #    "request_data": None,
