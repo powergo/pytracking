@@ -1,4 +1,5 @@
 import base64
+from collections import namedtuple
 from copy import deepcopy
 import json
 import time
@@ -211,6 +212,12 @@ class Configuration(object):
         return url[len(self.base_open_tracking_url):]
 
 
+TrackingResultJSON = namedtuple(
+    "TrackingResultJSON", [
+        "is_open_tracking", "is_click_tracking", "tracked_url", "webhook_url",
+        "metadata", "request_data", "timestamp"])
+
+
 class TrackingResult(object):
 
     def __init__(self, is_open_tracking=False, is_click_tracking=False,
@@ -234,6 +241,16 @@ class TrackingResult(object):
         self.metadata = metadata
         self.request_data = request_data
         self.timestamp = timestamp
+
+    def to_json_dict(self):
+        """Returns a version of the tracking result that can be safely encoded
+        and decoded in JSON
+
+        :rtype: TrackingResultJSON
+        """
+        return TrackingResultJSON(
+            self.is_open_tracking, self.is_click_tracking, self.tracked_url,
+            self.webhook_url, self.metadata, self.request_data, self.timestamp)
 
     def __str__(self):
         return "<pytracking.TrackingResult> is_open_tracking: {0} "\

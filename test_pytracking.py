@@ -72,6 +72,23 @@ def test_in_config_open_tracking_url():
     assert not tracking_result.is_click_tracking
 
 
+def test_in_config_open_tracking_url_to_json():
+    url = get_open_tracking_url(
+        base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL,
+        metadata=DEFAULT_METADATA)
+    path = get_open_tracking_url_path(
+        url, base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL)
+
+    tracking_result = get_open_tracking_result(
+        path, webhook_url=DEFAULT_WEBHOOK_URL).to_json_dict()
+    assert tracking_result.tracked_url is None
+    assert tracking_result.webhook_url == DEFAULT_WEBHOOK_URL
+    assert tracking_result.request_data is None
+    assert tracking_result.metadata == DEFAULT_METADATA
+    assert tracking_result.is_open_tracking
+    assert not tracking_result.is_click_tracking
+
+
 def test_in_config_open_tracking_full_url():
     url = get_open_tracking_url(
         base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL,
