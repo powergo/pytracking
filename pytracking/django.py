@@ -114,11 +114,11 @@ def get_request_data(request):
     }
 
 
-def get_configuration_from_settings():
+def get_configuration_from_settings(settings_name="PYTRACKING_CONFIGURATION"):
     """Builds a Configuration instance from the parameters in
     settings.PYTRACKING_CONFIGURATION.
     """
-    kwargs = getattr(settings, "PYTRACKING_CONFIGURATION")
+    kwargs = getattr(settings, settings_name)
     return get_configuration(None, kwargs)
 
 

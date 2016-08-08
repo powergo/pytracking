@@ -15,7 +15,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 EXTRA_REQUIRES = {
     'test': ['tox>=2.3.1', 'pytest>=2.9.2'],
     'webhook': ['requests>=2.10.0'],
-    'html': ['lxml>=3.6.1', 'pytest>=2.9.2'],
+    'html': ['lxml>=3.6.1'],
     'crypto': ['cryptography>=1.4'],
     'django': ['django-ipware>=1.1.5', 'django>=1.7']
 }
