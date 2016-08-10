@@ -5,18 +5,83 @@ pytracking - Email Open and Click Tracking Library
   Resulto Developpement Web Inc.
 :Version: 0.1.0
 
-This library provides a set of functions to provide open and click tracking
-and to send webhook requests when a tracking pixel or tracking link is
-requested.
+This library provides a set of functions that provide open and click tracking
+when sending emails. This is particularly useful if you rely on an Email
+Service Provider (ESP) such as Amazon SES or PostmarkApp that does not provide
+open and click tracking.
 
 The library only provides building blocks and does not handle the actual
-sending of email or the serving of tracking pixel and links.
+sending of email or the serving of tracking pixel and links, but it comes
+pretty close to this.
 
 
 .. contents:: Summary
    :backlinks: entry
    :local:
 
+
+Overview
+--------
+
+There are two main steps when tracking email opens and link clicks:
+
+1. Adding tracking information to emails
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To track email opens, the generally accepted strategy is to add a small 1x1
+transparent pixel at the end of an email. When a user opens an email, the email
+client (e.g., gmail, outlook, thunderbird) will load the pixel by making a GET
+request. The web server serving the request will then record the open and
+notify the sender of the email.
+
+To track link clicks, the generally accepted strategy is to rewrite links in an
+email to change the destination to a proxy. Once a user clicks on the link, the
+proxy redirects the user to the real link and notifies the sender of the email.
+
+pytracking provides a stateless strategy to open and click tracking: all the
+information you want to track are encoded in the pixel (open) and proxy (click)
+URLs. For example, if you want to track the customer id and the transaction id
+associated with a particular email, pytracking will encode this information in
+the URL. When the user opens the email or clicks on a link, the customer id and
+transaction id will be decoded and can then be sent to a webhook.
+
+See the `Get Open Tracking Link`_ section for a quick example.
+
+
+2. Handling email opens and link clicks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once a user opens an email or clicks on a link, the email client will send a
+request to the encoded URL. Your web server will receive such request and pass
+it to pytracking, which will decode the tracking information. You can then use
+the tracking information directly (e.g., update your tracking database) or you
+can send the information to a webhook.
+
+In the case of link tracking, the decoded information will contain the original
+URL that you must redirect the email client to.
+
+See the `Get Open Tracking Data from URL`_ section for a quick example.
+
+
+
+Optional Major Features provided by pytracking
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Encryption: pytracking uses base 64 to encode your tracking information,
+   which can be decoded by anyone. You can optionaly encrypt your tracking
+   information, which can only be decoded if you have the key. See the
+   `Encrypting Data`_ section for more information.
+
+2. HTML modification: pytracking can modify an HTML email to replace all links
+   and add a tracking pixel. See the `Modifying HTML emails to add tracking
+   links`_ section.
+
+3. Django: if you use Django to serve open and click tracking URLs, you can
+   extend pytracking Django views, which already provides the redirect and
+   pixel serving. See the `Using pytracking with Django`_ section.
+
+4. Webhooks: pytracking offers a shortcut function to make a POST request to a
+   webhook. See the `Notifying Webhooks`_ section.
 
 
 Requirements
@@ -59,7 +124,7 @@ Encoding
 ~~~~~~~~
 
 You can encode metadata in both kinds of links. For example, you can associate
-a customer id with a click tracking link so when the customer click on the
+a customer id with a click tracking link so when the customer clicks on the
 link, you'll know exactly which customer clicked on it.
 
 pylinktracking implements a stateless tracking strategy: all necessary
@@ -218,21 +283,18 @@ pytracking comes with View classes that you can extend and that handle open and
 click tracking link request.
 
 For example, the ``pytracking.django.OpenTrackingView`` will return a 1x1
-transparent PNG pixel for GET requests.
+transparent PNG pixel for GET requests. The
+``pytracking.django.ClickTrackingView`` will return a 302 redirect response to
+the tracked URL.
 
-The ``pytracking.django.ClickTrackingView`` will return a 302 redirect response
-to the tracked URL.
-
-Both views will return a 404 response if the tracking URL is invalid.
-
-Both views will capture the user agent and the user ip of the request. This
+Both views will return a 404 response if the tracking URL is invalid. Both
+views will capture the user agent and the user ip of the request. This
 information will be available in TrackingResult.request_data.
 
 You can extend both views to determine what to do with the tracking result
-(e.g., call a webhook or submit a task to a celery queue).
-
-Finally, you can encode your configuration parameters in your Django settings
-or you can compute them in your view.
+(e.g., call a webhook or submit a task to a celery queue). Finally, you can
+encode your configuration parameters in your Django settings or you can compute
+them in your view.
 
 To use the django feature, you must install pytracking with
 ``pytracking[django]``.
@@ -323,7 +385,7 @@ Notifying Webhooks
 ------------------
 
 You can send a POST request to a webhook with the tracking result. The webhook
-feature just package the tracking result as a json string in the POST body. It
+feature just packages the tracking result as a json string in the POST body. It
 also sets the content encoding to ``application/json``.
 
 To use the webhook feature, you must install pytracking with
@@ -338,7 +400,7 @@ To use the webhook feature, you must install pytracking with
     # Assumes that the webhook url is encoded in the url.
     full_url = "https://trackingdomain.com/path/e30203jhd9239754jh21387293jhf989sda="
     tracking_result = pytracking.get_open_tracking_result(
-        url_path, base_click_tracking_url="https://trackingdomain.com/path/")
+        full_url, base_click_tracking_url="https://trackingdomain.com/path/")
 
     # Will send a POST request with the following json str body:
     #  {
