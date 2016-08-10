@@ -14,10 +14,20 @@ The library only provides building blocks and does not handle the actual
 sending of email or the serving of tracking pixel and links, but it comes
 pretty close to this.
 
+.. image:: https://img.shields.io/circleci/project/resulto-admin/pytracking.svg
+    :target: https://circleci.com/gh/resulto-admin/pytracking
+
+.. image:: https://img.shields.io/pypi/v/pytracking.svg
+    :target: https://pypi.python.org/pypi/pytracking
+
+.. image:: https://img.shields.io/pypi/l/pytracking.svg
+
+.. image:: https://img.shields.io/pypi/pyversions/pytracking.svg
+
 
 .. contents:: Summary
-   :backlinks: entry
-   :local:
+    :backlinks: entry
+    :local:
 
 
 Overview
