@@ -93,6 +93,74 @@ Optional Major Features provided by pytracking
 4. Webhooks: pytracking offers a shortcut function to make a POST request to a
    webhook. See the `Notifying Webhooks`_ section.
 
+.. contents:: Summary
+   :backlinks: entry
+   :local:
+
+
+Overview
+--------
+
+There are two main steps when tracking email opens and link clicks:
+
+1. Adding tracking information to emails
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To track email opens, the generally accepted strategy is to add a small 1x1
+transparent pixel at the end of an email. When a user opens an email, the email
+client (e.g., gmail, outlook, thunderbird) will load the pixel by making a GET
+request. The web server serving the request will then record the open and
+notify the sender of the email.
+
+To track link clicks, the generally accepted strategy is to rewrite links in an
+email to change the destination to a proxy. Once a user clicks on the link, the
+proxy redirects the user to the real link and notifies the sender of the email.
+
+pytracking provides a stateless strategy to open and click tracking: all the
+information you want to track are encoded in the pixel (open) and proxy (click)
+URLs. For example, if you want to track the customer id and the transaction id
+associated with a particular email, pytracking will encode this information in
+the URL. When the user opens the email or clicks on a link, the customer id and
+transaction id will be decoded and can then be sent to a webhook.
+
+See the `Get Open Tracking Link`_ section for a quick example.
+
+
+2. Handling email opens and link clicks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once a user opens an email or clicks on a link, the email client will send a
+request to the encoded URL. Your web server will receive such request and pass
+it to pytracking, which will decode the tracking information. You can then use
+the tracking information directly (e.g., update your tracking database) or you
+can send the information to a webhook.
+
+In the case of link tracking, the decoded information will contain the original
+URL that you must redirect the email client to.
+
+See the `Get Open Tracking Data from URL`_ section for a quick example.
+
+
+
+Optional Major Features provided by pytracking
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Encryption: pytracking uses base 64 to encode your tracking information,
+   which can be decoded by anyone. You can optionaly encrypt your tracking
+   information, which can only be decoded if you have the key. See the
+   `Encrypting Data`_ section for more information.
+
+2. HTML modification: pytracking can modify an HTML email to replace all links
+   and add a tracking pixel. See the `Modifying HTML emails to add tracking
+   links`_ section.
+
+3. Django: if you use Django to serve open and click tracking URLs, you can
+   extend pytracking Django views, which already provides the redirect and
+   pixel serving. See the `Using pytracking with Django`_ section.
+
+4. Webhooks: pytracking offers a shortcut function to make a POST request to a
+   webhook. See the `Notifying Webhooks`_ section.
+
 
 Requirements
 ------------
