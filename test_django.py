@@ -41,6 +41,7 @@ class FakeDjangoRequest(object):
     def __init__(self):
         self.META = {}
         self.method = "GET"
+        self.path = ""
 
 
 @pytest.fixture
@@ -144,8 +145,12 @@ def test_empty_click_tracking_view(setup_django):
 def test_invalid_click_tracking_view(setup_django):
     result_metadata = {}
     request_data = {}
+    request_path = []
 
     class TestClickView(tracking_django.ClickTrackingView):
+
+        def notify_decoding_error(self, error, request):
+            request_path.append(request.path)
 
         def notify_tracking_event(self, tracking_result):
             result_metadata.update(tracking_result.metadata)
@@ -159,6 +164,7 @@ def test_invalid_click_tracking_view(setup_django):
     path = get_click_tracking_url_path(url, configuration=configuration)
 
     request = FakeDjangoRequest()
+    request.path = path + "bbb"
 
     with pytest.raises(Http404):
         TestClickView.as_view()(request, path + "bbb")
@@ -166,6 +172,7 @@ def test_invalid_click_tracking_view(setup_django):
     # No tracking
     assert not result_metadata
     assert not request_data
+    assert request_path[0].endswith("bbb")
 
 
 def test_valid_open_tracking_view(setup_django):
@@ -206,8 +213,12 @@ def test_valid_open_tracking_view(setup_django):
 def test_invalid_open_tracking_view(setup_django):
     result_metadata = {}
     request_data = {}
+    request_path = []
 
     class TestOpenView(tracking_django.OpenTrackingView):
+
+        def notify_decoding_error(self, error, request):
+            request_path.append(request.path)
 
         def notify_tracking_event(self, tracking_result):
             result_metadata.update(tracking_result.metadata)
@@ -220,9 +231,11 @@ def test_invalid_open_tracking_view(setup_django):
     path = get_open_tracking_url_path(url, configuration=configuration)
 
     request = FakeDjangoRequest()
+    request.path = path + "bbb"
 
     with pytest.raises(Http404):
         TestOpenView.as_view()(request, path + "bbb")
 
     assert not result_metadata
     assert not request_data
+    assert request_path[0].endswith("bbb")
