@@ -1,11 +1,12 @@
 Changelog - pytracking
 ======================
 
-0.2.0 - TBD 2017
+0.2.0 - June 6th 2017
 ---------------------
 
 - Added request parameter to notify_decoding_error callback in
   ``pytracking.django.TrackingView``
+- Added a reference to professional services in README.rst
 
 
 0.1.0 - August 10th 2016

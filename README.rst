@@ -3,7 +3,7 @@ pytracking - Email Open and Click Tracking Library
 
 :Authors:
   Resulto Developpement Web Inc.
-:Version: 0.1.0
+:Version: 0.2.0
 
 This library provides a set of functions that provide open and click tracking
 when sending emails. This is particularly useful if you rely on an Email
@@ -14,7 +14,7 @@ The library only provides building blocks and does not handle the actual
 sending of email or the serving of tracking pixel and links, but it comes
 pretty close to this.
 
-.. image:: https://img.shields.io/circleci/project/resulto-admin/pytracking.svg
+.. image:: https://img.shields.io/circleci/project/github/resulto/pytracking.svg
     :target: https://circleci.com/gh/resulto-admin/pytracking
 
 .. image:: https://img.shields.io/pypi/v/pytracking.svg
@@ -479,3 +479,11 @@ License
 
 This software is licensed under the `New BSD License`. See the `LICENSE` file
 in the repository for the full license text.
+
+Professional Support and Services
+---------------------------------
+
+If you need professional support for pytracking, you want a bug to be quickly
+fixed or you want a feature request to be quickly implemented, Resulto can
+provide such service. Just drop us a line at `pytracking@resulto.ca
+<mailto:pytracking@resulto.ca>`_
