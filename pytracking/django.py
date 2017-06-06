@@ -21,7 +21,7 @@ class TrackingView(View):
         """
         pass
 
-    def notify_decoding_error(self, exception):
+    def notify_decoding_error(self, exception, request):
         """Called when a decoding error occurs, and before
         responding with a 404.
 
@@ -61,7 +61,7 @@ class ClickTrackingView(TrackingView):
             tracking_result = get_tracking_result(
                 request, path, False, configuration)
         except Exception as e:
-            self.notify_decoding_error(e)
+            self.notify_decoding_error(e, request)
             raise Http404
 
         if not tracking_result.tracked_url:
@@ -91,7 +91,7 @@ class OpenTrackingView(TrackingView):
             tracking_result = get_tracking_result(
                 request, path, True, configuration)
         except Exception as e:
-            self.notify_decoding_error(e)
+            self.notify_decoding_error(e, request)
             raise Http404
 
         self.notify_tracking_event(tracking_result)
