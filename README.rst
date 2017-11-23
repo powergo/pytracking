@@ -342,7 +342,7 @@ Extending default views
             # and ip of the client.
             send_tracking_result_to_queue(tracking_result)
 
-        def notify_decoding_error(self, exception):
+        def notify_decoding_error(self, exception, request):
             # Called when the tracking link cannot be decoded
             # Override this to, for example, log the exception
             logger.log(exception)
@@ -363,7 +363,7 @@ Extending default views
             # and ip of the client.
             send_tracking_result_to_queue(tracking_result)
 
-        def notify_decoding_error(self, exception):
+        def notify_decoding_error(self, exception, request):
             # Called when the tracking link cannot be decoded
             # Override this to, for example, log the exception
             logger.log(exception)
