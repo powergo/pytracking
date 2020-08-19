@@ -7,8 +7,8 @@ pytracking - Email Open and Click Tracking Library
 
 This library provides a set of functions that provide open and click tracking
 when sending emails. This is particularly useful if you rely on an Email
-Service Provider (ESP) such as Amazon SES or PostmarkApp that does not provide
-open and click tracking.
+Service Provider (ESP) such as Amazon SES which does not provide open and click 
+tracking.
 
 The library only provides building blocks and does not handle the actual
 sending of email or the serving of tracking pixel and links, but it comes
