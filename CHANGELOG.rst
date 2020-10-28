@@ -1,6 +1,16 @@
 Changelog - pytracking
 ======================
 
+0.2.1 - October 28th 2020
+-------------------------
+
+- Added append_slash configuration parameter to append a slash to click and
+  open tracking URLs
+- Updated dependencies to prevent breaking changes in django-ipware
+- Updated supported Python version to 3.6
+- Updated README file
+- Removed CircleCI integration
+
 0.2.0 - June 6th 2017
 ---------------------
 

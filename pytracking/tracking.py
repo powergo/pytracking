@@ -28,7 +28,7 @@ class Configuration(object):
             include_webhook_url=False, base_open_tracking_url=None,
             base_click_tracking_url=None, default_metadata=None,
             include_default_metadata=False, encryption_bytestring_key=None,
-            encoding="utf-8", **kwargs):
+            encoding="utf-8", append_slash=False, **kwargs):
         """
 
         :param webhook_url: The webhook to notify when a click or open is
@@ -61,6 +61,7 @@ class Configuration(object):
         self.encoding = encoding
         self.kwargs = kwargs
         self.encryption_key = None
+        self.append_slash = False
 
         self.cache_encryption_key()
 
@@ -144,12 +145,18 @@ class Configuration(object):
     def get_open_tracking_url_from_data_str(self, data_str):
         """TODO
         """
-        return urljoin(self.base_open_tracking_url, data_str)
+        temp_url = urljoin(self.base_open_tracking_url, data_str)
+        if self.append_slash:
+            temp_url += "/"
+        return temp_url
 
     def get_click_tracking_url_from_data_str(self, data_str):
         """TODO
         """
-        return urljoin(self.base_click_tracking_url, data_str)
+        temp_url = urljoin(self.base_click_tracking_url, data_str)
+        if self.append_slash:
+            temp_url += "/"
+        return temp_url
 
     def get_open_tracking_url(self, extra_metadata):
         data_to_embed = self.get_data_to_embed(None, extra_metadata)

@@ -1,7 +1,0 @@
-dependencies:
-  override:
-    - sudo apt-get update; sudo apt-get install build-essential libssl-dev libffi-dev python3-dev
-    - pip install tox
-test:
-  override:
-    - tox

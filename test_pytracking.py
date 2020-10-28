@@ -55,6 +55,13 @@ def test_basic_get_open_tracking_url():
     assert url == "https://a.b.com/tracking/open/e30="
 
 
+def test_basic_get_open_tracking_url_append_slash():
+    url = get_open_tracking_url(
+        base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL,
+        append_slash=True)
+    assert url == "https://a.b.com/tracking/open/e30=/"
+
+
 def test_in_config_open_tracking_url():
     url = get_open_tracking_url(
         base_open_tracking_url=DEFAULT_BASE_OPEN_TRACKING_URL,
@@ -136,6 +143,15 @@ def test_basic_get_click_tracking_url():
         base_click_tracking_url=DEFAULT_BASE_CLICK_TRACKING_URL)
     assert url ==\
         "https://a.b.com/tracking/eyJ1cmwiOiAiaHR0cHM6Ly93d3cuYm9iLmNvbS9oZWxsby13b3JsZC8_dG9rZW49dmFsdWVcdTAwZTlcdTAwZTlcdTAwZTkifQ=="  # noqa
+
+
+def test_basic_get_click_tracking_url_append_slash():
+    url = get_click_tracking_url(
+        DEFAULT_URL_TO_TRACK,
+        base_click_tracking_url=DEFAULT_BASE_CLICK_TRACKING_URL,
+        append_slash=True)
+    assert url ==\
+        "https://a.b.com/tracking/eyJ1cmwiOiAiaHR0cHM6Ly93d3cuYm9iLmNvbS9oZWxsby13b3JsZC8_dG9rZW49dmFsdWVcdTAwZTlcdTAwZTlcdTAwZTkifQ==/"  # noqa
 
 
 def test_in_config_click_tracking_url():

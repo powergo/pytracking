@@ -3,7 +3,7 @@ pytracking - Email Open and Click Tracking Library
 
 :Authors:
   Resulto Developpement Web Inc.
-:Version: 0.2.0
+:Version: 0.2.1
 
 This library provides a set of functions that provide open and click tracking
 when sending emails. This is particularly useful if you rely on an Email
@@ -12,9 +12,6 @@ Service Provider (ESP) which does not provide open and click tracking.
 The library only provides building blocks and does not handle the actual
 sending of email or the serving of tracking pixel and links, but it comes
 pretty close to this.
-
-.. image:: https://img.shields.io/circleci/project/github/resulto/pytracking.svg
-    :target: https://circleci.com/gh/resulto-admin/pytracking
 
 .. image:: https://img.shields.io/pypi/v/pytracking.svg
     :target: https://pypi.python.org/pypi/pytracking
@@ -320,7 +317,8 @@ adding this key in your settings file:
         "webhook_url": "http://requestb.in/123",
         "base_open_tracking_url": "http://tracking.domain.com/open/",
         "base_click_tracking_url": "http://tracking.domain.com/click/",
-        "default_metadata": {"analytics_key": "123456"}
+        "default_metadata": {"analytics_key": "123456"},
+        "append_slash": True
     }
 
 
@@ -461,7 +459,7 @@ TODO
 
 2. Add more examples.
 
-3. Allow mulitple webhooks and webhooks per tracking method.
+3. Allow multiplpe webhooks and webhooks per tracking method.
 
 4. Transform Django views into view mixins.
 
@@ -478,11 +476,3 @@ License
 
 This software is licensed under the `New BSD License`. See the `LICENSE` file
 in the repository for the full license text.
-
-Professional Support and Services
----------------------------------
-
-If you need professional support for pytracking, you want a bug to be quickly
-fixed or you want a feature request to be quickly implemented, Resulto can
-provide such service. Just drop us a line at `pytracking@resulto.ca
-<mailto:pytracking@resulto.ca>`_
