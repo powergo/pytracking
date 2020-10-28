@@ -96,7 +96,7 @@ Optional Major Features provided by pytracking
 Requirements
 ------------
 
-pytracking works with Python 3.4+. It doesn't require any external library, but
+pytracking works with Python 3.6+. It doesn't require any external library, but
 there are many optional features that have dependencies.
 
 
@@ -450,7 +450,7 @@ Testing pytracking
 pytracking uses `tox <https://tox.readthedocs.io/en/latest/>`_ and `py.test
 <http://docs.pytest.org/en/latest/>`_. If you have tox installed, just run
 ``tox`` and all possible configurations of pytracking will be tested on Python
-3.4.
+3.6.
 
 
 TODO
