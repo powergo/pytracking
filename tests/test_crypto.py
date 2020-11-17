@@ -1,22 +1,12 @@
 import copy
 
-import pytest
-
 from pytracking import (
     Configuration, get_click_tracking_url, get_click_tracking_url_path,
     get_open_tracking_url_path,
     get_click_tracking_result, get_open_tracking_url,
     get_open_tracking_result)
 
-
-try:
-    from cryptography.fernet import Fernet
-    support_crypto = True
-except ImportError:
-    support_crypto = False
-
-pytestmark = pytest.mark.skipif(
-    not support_crypto, reason="Cryptography lib not installed")
+from cryptography.fernet import Fernet
 
 DEFAULT_URL_TO_TRACK = "https://www.bob.com/hello-world/?token=valueééé"
 

@@ -1,6 +1,13 @@
 Changelog - pytracking
 ======================
 
+0.2.2 - November 17th 2020
+--------------------------
+
+- Updated django-ipware to >=2.0.
+- Updated tests structure and added Github Actions for running tests
+- Updated supported Python versions to 3.6, 3.7, 3.8, 3.9
+
 0.2.1 - October 28th 2020
 -------------------------
 
