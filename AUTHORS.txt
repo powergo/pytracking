@@ -5,5 +5,6 @@ people who have submitted patches, reported bugs, and generally made the
 project that much better:
 
 Barthélémy Dagenais <bart@powergo.ca>
-Gabriel Le Breton <lebreton.gabriel@gmail.com>
+Jonathan <machadofjonathan@gmail.com>
 Mohammad Javad Naderi <mjnaderi@gmail.com>
+Gabriel Le Breton <lebreton.gabriel@gmail.com>
