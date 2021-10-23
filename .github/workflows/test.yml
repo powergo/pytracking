@@ -21,14 +21,6 @@ jobs:
           - python-version: 3.7
             env: django-dj111
           - python-version: 3.6
-            env: django-dj20
-          - python-version: 3.7
-            env: django-dj20
-          - python-version: 3.6
-            env: django-dj21
-          - python-version: 3.7
-            env: django-dj21
-          - python-version: 3.6
             env: django-dj22
           - python-version: 3.7
             env: django-dj22
@@ -37,21 +29,21 @@ jobs:
           - python-version: 3.9
             env: django-dj22
           - python-version: 3.6
-            env: django-dj30
+            env: django-dj31
           - python-version: 3.7
-            env: django-dj30
+            env: django-dj31
           - python-version: 3.8
-            env: django-dj30
+            env: django-dj31
           - python-version: 3.9
-            env: django-dj30
+            env: django-dj31
           - python-version: 3.6
-            env: django-dj31
+            env: django-dj32
           - python-version: 3.7
-            env: django-dj31
+            env: django-dj32
           - python-version: 3.8
-            env: django-dj31
+            env: django-dj32
           - python-version: 3.9
-            env: django-dj31
+            env: django-dj32
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
