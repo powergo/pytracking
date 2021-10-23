@@ -1,7 +1,7 @@
 Changelog - pytracking
 ======================
 
-0.2.2 - November 17th 2020
+0.2.2 - October 23rd 2021
 --------------------------
 
 - Updated django-ipware to >=2.0.

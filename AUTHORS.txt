@@ -6,3 +6,4 @@ project that much better:
 
 Barthélémy Dagenais <bart@powergo.ca>
 Gabriel Le Breton <lebreton.gabriel@gmail.com>
+Mohammad Javad Naderi <mjnaderi@gmail.com>

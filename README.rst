@@ -2,7 +2,7 @@ pytracking - Email Open and Click Tracking Library
 ==================================================
 
 :Authors:
-  Resulto Developpement Web Inc.
+  Power Go
 :Version: 0.2.2
 
 This library provides a set of functions that provide open and click tracking
