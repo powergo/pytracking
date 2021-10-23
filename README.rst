@@ -13,6 +13,9 @@ The library only provides building blocks and does not handle the actual
 sending of email or the serving of tracking pixel and links, but it comes
 pretty close to this.
 
+.. image:: https://github.com/powergo/pytracking/actions/workflows/test.yml/badge.svg
+    :target: https://github.com/powergo/pytracking/actions/workflows/test.yml
+
 .. image:: https://img.shields.io/pypi/v/pytracking.svg
    :target: https://pypi.python.org/pypi/pytracking
 
