@@ -3,7 +3,7 @@ pytracking - Email Open and Click Tracking Library
 
 :Authors:
   Resulto Developpement Web Inc.
-:Version: 0.2.1
+:Version: 0.2.2
 
 This library provides a set of functions that provide open and click tracking
 when sending emails. This is particularly useful if you rely on an Email
@@ -14,7 +14,7 @@ sending of email or the serving of tracking pixel and links, but it comes
 pretty close to this.
 
 .. image:: https://img.shields.io/pypi/v/pytracking.svg
-    :target: https://pypi.python.org/pypi/pytracking
+   :target: https://pypi.python.org/pypi/pytracking
 
 .. image:: https://img.shields.io/pypi/l/pytracking.svg
 
@@ -448,7 +448,7 @@ Testing pytracking
 pytracking uses `tox <https://tox.readthedocs.io/en/latest/>`_ and `py.test
 <http://docs.pytest.org/en/latest/>`_. If you have tox installed, just run
 ``tox`` and all possible configurations of pytracking will be tested on Python
-3.6.
+3.6-3.9.
 
 
 TODO

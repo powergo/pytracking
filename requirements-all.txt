@@ -1,5 +1,0 @@
--r requirements-crypto.txt
--r requirements-django.txt
--r requirements-html.txt
--r requirements-test.txt
--r requirements-webhook.txt

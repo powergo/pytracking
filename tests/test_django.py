@@ -3,31 +3,21 @@ import pytest
 from pytracking import (
     get_open_tracking_url, get_click_tracking_url, get_open_tracking_url_path,
     get_click_tracking_url_path, TRACKING_PIXEL, PNG_MIME_TYPE)
-from test_pytracking import (
+from .test_pytracking import (
     DEFAULT_BASE_OPEN_TRACKING_URL, DEFAULT_BASE_CLICK_TRACKING_URL,
     DEFAULT_METADATA, DEFAULT_WEBHOOK_URL, DEFAULT_DEFAULT_METADATA,
     DEFAULT_URL_TO_TRACK, EXPECTED_METADATA)
 
+# Must call configure before importing tracking_django
+from django.conf import settings
+from django.http import Http404
+settings.configure()
+
+import pytracking.django as tracking_django
+
+
 DEFAULT_ENCODED_URL_TO_TRACK =\
     "https://www.bob.com/hello-world/?token=value%C3%A9%C3%A9%C3%A9"
-
-try:
-    import ipware  # noqa
-
-    # Must call configure before importing tracking_django
-    from django.conf import settings
-    from django.http import Http404
-    settings.configure()
-
-    import pytracking.django as tracking_django
-
-    support_django = True
-except ImportError:
-    support_django = False
-
-
-pytestmark = pytest.mark.skipif(
-    not support_django, reason="Django-support lib not installed")
 
 DEFAULT_SETTINGS = {
     "webhook_url": DEFAULT_WEBHOOK_URL,

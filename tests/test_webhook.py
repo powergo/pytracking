@@ -1,26 +1,15 @@
 from unittest.mock import patch
 
-import pytest
-
 from pytracking import (
     get_click_tracking_url, get_click_tracking_url_path,
     get_click_tracking_result, get_open_tracking_url,
     get_open_tracking_result, get_open_tracking_url_path,
     DEFAULT_TIMEOUT_SECONDS)
-from test_pytracking import (
+from .test_pytracking import (
     DEFAULT_URL_TO_TRACK, DEFAULT_BASE_CLICK_TRACKING_URL, DEFAULT_WEBHOOK_URL,
     DEFAULT_METADATA, DEFAULT_BASE_OPEN_TRACKING_URL)
 
-try:
-    import requests  # noqa
-    import pytracking.webhook
-    support_requests = True
-except ImportError:
-    support_requests = False
-
-
-pytestmark = pytest.mark.skipif(
-    not support_requests, reason="Requests lib not installed")
+import pytracking.webhook
 
 
 def test_send_webhook_click():

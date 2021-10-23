@@ -2,7 +2,7 @@ from django.conf import settings
 from django.http import (
     HttpResponseRedirect, Http404, HttpResponse)
 from django.views.generic import View
-from ipware.ip import get_ip
+from ipware import get_client_ip
 from pytracking.tracking import (
     get_configuration, TRACKING_PIXEL, PNG_MIME_TYPE)
 
@@ -107,7 +107,7 @@ def get_request_data(request):
     the client IP in X-Forwarded-For header).
     """
     user_agent = request.META.get("HTTP_USER_AGENT")
-    ip = get_ip(request)
+    ip = get_client_ip(request)[0]
     return {
         "user_agent": user_agent,
         "user_ip": ip
