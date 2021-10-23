@@ -29,14 +29,6 @@ jobs:
           - python-version: 3.9
             env: django-dj22
           - python-version: 3.6
-            env: django-dj30
-          - python-version: 3.7
-            env: django-dj30
-          - python-version: 3.8
-            env: django-dj30
-          - python-version: 3.9
-            env: django-dj30
-          - python-version: 3.6
             env: django-dj31
           - python-version: 3.7
             env: django-dj31
