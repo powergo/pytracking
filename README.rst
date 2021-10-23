@@ -231,7 +231,7 @@ Get Click Tracking Data from URL
     import pytracking
 
     full_url = "https://trackingdomain.com/path/e30203jhd9239754jh21387293jhf989sda="
-    tracking_result = pytracking.get_open_tracking_result(
+    tracking_result = pytracking.get_click_tracking_result(
         full_url, base_click_tracking_url="https://trackingdomain.com/path/")
 
     # Metadata is in tracking_result.metadata
