@@ -11,6 +11,8 @@ DEFAULT_ATTRIBUTES = {
     "alt": ""
 }
 
+DOCTYPE = "<!DOCTYPE html>"
+
 
 def adapt_html(
         html_text, extra_metadata, click_tracking=True, open_tracking=True,
@@ -40,7 +42,8 @@ def adapt_html(
     if open_tracking:
         _add_tracking_pixel(tree, extra_metadata, configuration)
 
-    new_html_text = html.tostring(tree)
+    new_html_text = html.tostring(
+        tree, include_meta_content_type=True, doctype=DOCTYPE)
 
     return new_html_text.decode("utf-8")
 

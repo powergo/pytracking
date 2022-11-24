@@ -64,6 +64,9 @@ def test_adapt_html_full():
     _test_open_tracking(tree)
     _test_click_tracking(tree)
 
+    assert "<!DOCTYPE html>" in new_html
+    assert "<meta charset=\"UTF-8\">" in new_html
+
 
 def test_adapt_html_click_only():
     new_html = tracking_html.adapt_html(
