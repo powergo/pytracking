@@ -1,6 +1,12 @@
 Changelog - pytracking
 ======================
 
+0.2.1.1 - November 24th 2022
+----------------------------
+
+- Fixed missing DOCTYPE and meta charset tag when adapting html for open
+  and click tracking.
+
 0.2.1 - October 28th 2020
 -------------------------
 
