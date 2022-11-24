@@ -1,8 +1,14 @@
 Changelog - pytracking
 ======================
 
-0.2.2 - October 23rd 2021
+0.2.3 - November 24th 2022
 --------------------------
+
+- Fixed missing DOCTYPE and meta charset tag when adapting HTML for open and
+  click tracking.
+
+0.2.2 - October 23rd 2021
+-------------------------
 
 - Updated django-ipware to >=2.0.
 - Updated tests structure and added Github Actions for running tests
